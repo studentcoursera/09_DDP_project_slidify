@@ -1,26 +1,125 @@
 ---
-title       : 
-subtitle    : 
-author      : 
-job         : 
+title       : Word Cloud Generator
+subtitle    : Project for DDP course
+author      : Ambika J
+job         : Learner
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
-hitheme     : tomorrow      # 
-widgets     : []            # {mathjax, quiz, bootstrap}
+hitheme     : solarized_light      # ribbon
+widgets     : [bootstrap, shiny, interactive] #{mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
-knit        : slidify::knit2slides
+ext_widgets : {rCharts: [libraries/nvd3]}
+#knit        : slidify::knit2slides
 ---
 
-## Read-And-Delete
+## About _Word Cloud Generator_ App
 
-1. Edit YAML front matter
-2. Write using R Markdown
-3. Use an empty line followed by three dashes to separate slides!
+```{r rmls1, echo=FALSE, message=FALSE}
+rm(list = ls())
+```
 
---- .class #id 
+The key idea about this app is to _upload a text file_ (<500 MB) and quickly generate **word cloud** and **frequency table**. And allow the user to _download_ the generated **word cloud as an image** and the **frequency table as a CSV file**.
 
-## Slide 2
+In this process, if a user wants to change **minimum frequencies**, **maximum words** to be displayed in the word cloud or tweak the **rotation** of the cloud, user can tweak the same with the _sliders_ provided for each of these.  
 
+This app has 3 tabs. **First tab** generates word cloud. **Second tab** gives more info about this project. **Third tab** is _another app_, just for _demo purpose_ of **network d3** displayed.
 
+**The following 3 slides would display:**  
+1. Sample of Word cloud gen: the plot and the table.  
+2. Interactive chart with the frequencies of the words.  
+3. Future enhancements.  
+
+--- &twocol w1:60% w2:40%
+
+## Word cloud
+
+```{r function-terms, echo=FALSE, message=FALSE}
+file <- "~/Coursera/CourseraCourses/JohnsHopkins-DataAnalysis-courseraCourse/09-DevelopingDataProducts/shiny/good_shiny_apps/word_cloud_gen/data/dummy.txt"
+word_count <- function(text){
+    words  <-  Corpus(VectorSource(text))
+    words  <-  tm_map(words, content_transformer(tolower))
+    words  <-  tm_map(words, removePunctuation)
+    words  <-  tm_map(words, removeNumbers)
+    words  <-  tm_map(words, removeWords,
+                   c(stopwords("SMART"), "man", "men"))
+    
+    termsMatrix <- TermDocumentMatrix(words, control = list(minWordLength = 1))
+    m <- as.matrix(termsMatrix)
+    sort(rowSums(m), decreasing = TRUE)
+}
+```
+
+*** =left
+
+```{r simple-plot, message = FALSE, eval=TRUE, echo=FALSE}
+library(wordcloud); library(tm)
+terms <- word_count(readLines(file))
+```
+```{r, echo=FALSE, resutls='asis', fig.height=5, fig.width=6}
+wordcloud(names(terms), terms, min.freq = 1, 
+        random.order = F, max.words = 100, 
+        colors = brewer.pal(8, "Dark2"), 
+        rot.per = 0.35)
+```
+
+```{r simple-plot1, message = FALSE, eval=FALSE, results='hide'}
+library(wordcloud); library(tm)
+terms <- word_count(readLines(file))
+col <- brewer.pal(8, "Dark2")
+wordcloud(names(terms), terms, 
+    rot.per = 0.35, colors = col)
+```
+
+*** =right
+
+### Top 7 frequencies table
+
+```{r table, results='asis', comment = NA}
+library(xtable)
+options(xtable.type='html')
+words <- data.frame(freq=terms) 
+freq <- head(words, n=7)
+xtable(freq)
+```
+
+--- .class #id2
+
+## An analysis of top 7 frequencies
+
+```{r echo = TRUE, eval=FALSE}
+library(rCharts)
+#grp: words starting alphabet. 1 -> a-e;  2 -> f-j;  3 -> k-o;  4 -> p-t;  5 -> u-z
+n1 <- nPlot(freq ~ grp, group = 'wrds', type = 'multiBarChart', data = t1[1:7,])
+n1$print('chart')
+```
+#### NOTE: Issue with rCharts in slidify, **Grouped** & **Stacked** options overlap. To solve, click **stacked** radio button.  
+```{r echo = F, results = 'asis', fig.height=3, fig.width=5}
+library(rCharts)
+
+word_list <- data.frame(wrds=row.names(words), freq=words$freq)
+t1 <- cbind(word_list[grep("[a-e]",substring(word_list$wrds, 1, 1)),],grp=1)
+t1 <- rbind(t1, cbind(word_list[grep("[f-j]",substring(word_list$wrds, 1, 1)),],grp=2))
+t1 <- rbind(t1, cbind(word_list[grep("[k-o]",substring(word_list$wrds, 1, 1)),],grp=3))
+t1 <- rbind(t1, cbind(word_list[grep("[p-t]",substring(word_list$wrds, 1, 1)),],grp=4))
+t1 <- rbind(t1, cbind(word_list[grep("[u-z]",substring(word_list$wrds, 1, 1)),],grp=5))
+
+sorted_t1 <- t1[order(t1$freq, decreasing = TRUE),]
+n1 <- nPlot(freq ~ grp, group = 'wrds', type = 'multiBarChart', data = sorted_t1[1:7,])
+n1$print('chart')
+```
+
+--- .class #id3
+
+## Future Enhancements
+
+1. We can extend this to spam classification, do a word cloud for spam and ham clouds.  
+2. Fix the limitations listed.  
+3. We can further extend word cloud to metadata and tags and project word cloud accordingly.
+4. There are some apps which analyses twitter data, can dive deeper into this as well.
+5. We can extend this by grouping words, different search terms and tags, and build a new model.
+
+```{r rmls2, echo=FALSE, message=FALSE}
+rm(list = ls())
+```
 
 

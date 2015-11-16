@@ -1,0 +1,9 @@
+name: Publish Document
+account: rpubs
+server: rpubs.com
+appId:
+        https://api.rpubs.com/api/v1/document/126365/fd85ff1b48db4980b361608f1787d8d7
+bundleId:
+        https://api.rpubs.com/api/v1/document/126365/fd85ff1b48db4980b361608f1787d8d7
+url: http://rpubs.com/ambikasam/126365
+when: 1447695709.62871
