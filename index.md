@@ -84,7 +84,7 @@ library(rCharts)
 n1 <- nPlot(freq ~ grp, group = 'wrds', type = 'multiBarChart', data = t1[1:7,])
 n1$print('chart')
 ```
-#### NOTE: Issue with rCharts in slidify, **Grouped** & **Stacked** options overlap. To solve, click **stacked** radio button.  
+#### NOTE: Issue with rCharts in slidify, overlap of options and legends. To solve, click **stacked** radio button.  
 
 <div id = 'chart' class = 'rChart nvd3'></div>
 <script type='text/javascript'>
