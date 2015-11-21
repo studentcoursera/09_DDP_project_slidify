@@ -1250,7 +1250,9 @@ article.smaller q:before, article.smaller q:after {
 
 /* line 862, ../scss/default.scss */
 .thank-you-slide {
-  background: #4387fd !important;
+  /*background: #4387fd !important;
+  background: rgba(0, 100, 255, 0.3) !important;*/
+  background: lightblue !important;
   color: white;
 }
 /* line 866, ../scss/default.scss */

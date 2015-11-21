@@ -3,44 +3,81 @@ title       : Word Cloud Generator
 subtitle    : Project for DDP course
 author      : Ambika J
 job         : Learner
+logo        : word_cloud_logo.png
+#biglogo     : word_cloud_logo.png
+license     : by-nc-sa
 framework   : io2012        # {io2012, html5slides, shower, dzslides, ...}
 highlighter : highlight.js  # {highlight.js, prettify, highlight}
 hitheme     : solarized_light      # ribbon
-widgets     : [bootstrap, shiny, interactive] #{mathjax, quiz, bootstrap}
+widgets     : [bootstrap, interactive] #{mathjax, quiz, bootstrap}
 mode        : selfcontained # {standalone, draft}
 ext_widgets : {rCharts: [libraries/nvd3]}
 #knit        : slidify::knit2slides
----
+--- .outfont &twocol
 
-## About _Word Cloud Generator_ App
+<style>
+slide.outfont p {
+    font-size: 21px ;
+}
+</style>
+
+## A _Word Cloud Generator_ App
 
 
 
-The key idea about this app is to _upload a text file_ (<500 MB) and quickly generate **word cloud** and **frequency table**. And allow the user to _download_ the generated **word cloud as an image** and the **frequency table as a CSV file**.
+*** =left
+<br/>
+**Problem statement:** Given any book, article, program, news, journal, white-paper, etc. user wants to  visualise the high frequency words in a most effective way.
 
-In this process, if a user wants to change **minimum frequencies**, **maximum words** to be displayed in the word cloud or tweak the **rotation** of the cloud, user can tweak the same with the _sliders_ provided for each of these.  
+With a word cloud generator the high frequency words of any given text file are identified, highlighted and visually represented.
 
-This app has 3 tabs. **First tab** generates word cloud. **Second tab** gives more info about this project. **Third tab** is _another app_, just for _demo purpose_ of **network d3** displayed.
+<hr/>
+The key idea is to quickly build and download **word cloud** for any file you are interested in.   
+<hr/>
+Very simple to use. You upload a file and tweak the settings; the app generates a downloadable word-cloud and frequency-table. Also, enables analyis of the 7 top frequencies, if interested.  
+  
 
-**The following 3 slides would display:**  
-1. Sample of Word cloud gen: the plot and the table.  
-2. Interactive chart with the frequencies of the words.  
-3. Future enhancements.  
+*** =right
+<br/>
+![](assets/img/word_cloud_gen_anly_nav.png)
+  
 
---- &twocol w1:60% w2:40%
+--- &twocol
 
-## Word cloud
+## Applications, features and future
+
+*** =left
+
+### Applications:   
+1. **Pitches and Presentations:** Re-use the downloaded word-cloud in presentations, pitches, etc. which saves considerable amount of time.  
+2. **Further Data analysis:** The computed frequency tables can further be used in data analysis. Example: Many data analysts use excel as tool to compute. For those users, its a handy tool.  
+3. **Target audience:** Content analysts, data miners, publishers, search and social media.
+  
+*** =right
+
+### Features and future:  
+0. Word cloud is more effective than a line/bar/point plots; when analysis is related to words and its importance.
+1. Further **analyse** the top 7 frequencies.
+2. Key differentiator of this app is the **flexibility to tweak** 3 features and analyse the top 7 frequenices. In the next phase, we will monitor and understand the users need and add/modify/delete/automate a few features; making it more intuitive.  
+3. Future upgrade of the app will involve the ability to analyse user behavior based on machine learning and predictive analysis. This is planned in phase2 and phase 3.
+
+
+--- &twocol
+
+## Visual Features
 
 
 
 *** =left
 
+### Word cloud
 
-![plot of chunk unnamed-chunk-1](assets/fig/unnamed-chunk-1-1.png) 
+![plot of chunk simple-plot](assets/fig/simple-plot-1.png) 
 
 
 ```r
 library(wordcloud); library(tm)
+## word_count() computes word matrix
 terms <- word_count(readLines(file))
 col <- brewer.pal(8, "Dark2")
 wordcloud(names(terms), terms, 
@@ -49,42 +86,9 @@ wordcloud(names(terms), terms,
 
 *** =right
 
-### Top 7 frequencies table
+### An analysis of top 7 frequencies
 
-
-```r
-library(xtable)
-options(xtable.type='html')
-words <- data.frame(freq=terms) 
-freq <- head(words, n=7)
-xtable(freq)
-```
-
-<!-- html table generated in R 3.2.2 by xtable 1.8-0 package -->
-<!-- Mon Nov 16 23:14:03 2015 -->
-<table border=1>
-<tr> <th>  </th> <th> freq </th>  </tr>
-  <tr> <td align="right"> work </td> <td align="right"> 470.00 </td> </tr>
-  <tr> <td align="right"> management </td> <td align="right"> 237.00 </td> </tr>
-  <tr> <td align="right"> time </td> <td align="right"> 147.00 </td> </tr>
-  <tr> <td align="right"> scientific </td> <td align="right"> 135.00 </td> </tr>
-  <tr> <td align="right"> workman </td> <td align="right"> 123.00 </td> </tr>
-  <tr> <td align="right"> workmen </td> <td align="right"> 115.00 </td> </tr>
-  <tr> <td align="right"> day </td> <td align="right"> 109.00 </td> </tr>
-   </table>
-
---- .class #id2
-
-## An analysis of top 7 frequencies
-
-
-```r
-library(rCharts)
-#grp: words starting alphabet. 1 -> a-e;  2 -> f-j;  3 -> k-o;  4 -> p-t;  5 -> u-z
-n1 <- nPlot(freq ~ grp, group = 'wrds', type = 'multiBarChart', data = t1[1:7,])
-n1$print('chart')
-```
-#### NOTE: Issue with rCharts in slidify, overlap of options and legends. To solve, click **stacked** radio button.  
+#### NOTE: Issue with rCharts in slidify; overlap of options and legends. To solve, click **stacked** radio button. 
 
 <div id = 'chart' class = 'rChart nvd3'></div>
 <script type='text/javascript'>
@@ -94,7 +98,7 @@ n1$print('chart')
     function drawchart(){  
       var opts = {
  "dom": "chart",
-"width":    800,
+"width":    500,
 "height":    400,
 "x": "grp",
 "y": "freq",
@@ -188,15 +192,19 @@ n1$print('chart')
     };
 </script>
 
---- .class #id3
+--- {tpl: thankyou, social: [{title: App, href: "https://neo-r-apps.shinyapps.io/word_cloud_gen"}]}
 
-## Future Enhancements
+## Extendability  
+1. This app can be extended to spam classification, do a word cloud for spam and ham.  
+1. It can be further extended by grouping words; different search terms and tags, and build a new model.
+1. Analysis of twitter data, can dive deeper into this as well.
+1. Further, extend to project metadata and tags in word cloud form.
+1. We would not limit it to only frequencies, but add weighted words as well and build it to use in prediction logic.
 
-1. We can extend this to spam classification, do a word cloud for spam and ham clouds.  
-2. Fix the limitations listed.  
-3. We can further extend word cloud to metadata and tags and project word cloud accordingly.
-4. There are some apps which analyses twitter data, can dive deeper into this as well.
-5. We can extend this by grouping words, different search terms and tags, and build a new model.
+## References  
+1. Shiny apps gallery
+2. Download references are from a blog by user 'TrigonaMinima'
+
 
 
 

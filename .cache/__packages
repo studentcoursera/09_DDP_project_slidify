@@ -10,3 +10,5 @@ RColorBrewer
 wordcloud
 NLP
 tm
+networkD3
+memoise

@@ -45,7 +45,7 @@
 article p, article li, article li.build, section p, section li{
   font-family: 'Open Sans','Helvetica', 'Crimson Text', 'Garamond',  'Palatino', sans-serif;
   text-align: justify;
-  font-size:22px;
+  font-size:21px;
   line-height: 1.5em;
   color: #444;
 }
@@ -337,7 +337,7 @@ article p {
 }
 
 code {
-  font-size: 100%;
+  font-size: 90%;
   font-family: "Source Code Pro", monospace;
   color: darkred;
 }
